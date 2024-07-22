@@ -1,0 +1,53 @@
+---
+title: "Question_1"
+author: "Salloni"
+date: "2024-07-22"
+output: html_document
+---
+## Forming our data science question
+How has wealth within races changed across the selected years 1995, 2007, and 2016?
+
+#Setup
+```{r}
+install.packages("tidyverse")
+install.packages("tidytuesdayR")
+```
+## Getting the data
+The data provided is sourced from GitHub, where the creator obtained it from the Urban Institute and the US Census. The data focuses on wealth and income over time, highlighting persistent racial disparities in America. The data includes homeownership rates, retirement savings, student loan debt, lifetime savings, income median/mean, income bracket, and income distribution by bracket.
+
+Historical income tables from the US Census and articles from the Brookings Institute and Pew Research Center further explore barriers faced by Black Americans, including slavery, discriminatory policies, and economic setbacks like the Tulsa Race Massacre.
+
+the litime earn dataset contains
+define columns and rows and variables
+just my own variables 
+
+The variables I need to focus on lifetime earnings
+
+```{r}
+lifetime_earn <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/lifetime_earn.csv')
+student_debt <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/student_debt.csv')
+retirement <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/retirement.csv')
+home_owner <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/home_owner.csv')
+race_wealth <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/race_wealth.csv')
+income_time <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_time.csv')
+income_limits <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_limits.csv')
+income_aggregate <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_aggregate.csv')
+income_distribution <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_distribution.csv')
+income_mean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_mean.csv')
+
+```
+##Explore Data
+```{r}
+
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
