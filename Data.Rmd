@@ -1,21 +1,20 @@
 ---
-title: "Wealth and income"
+title: "Wealth and Debt"
 author: "Walter"
-output: html_document
 date: "2024-07-22"
+output: html_document
 ---
+
+Packages installed
 
 ```{r}
 install.packages("tidyverse")
 library(tidyverse)
-
+install.packages("kableExtra")
+library(kableExtra)
 ```
 
-Data from Github: 
-https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-02-09/readme.md
-
-
-This is the Wealth and income between race and gender over time.
+Loaded Data sets
 
 ```{r}
 lifetime_earn <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/lifetime_earn.csv')
@@ -29,4 +28,66 @@ income_aggregate <- readr::read_csv('https://raw.githubusercontent.com/rfordatas
 income_distribution <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_distribution.csv')
 income_mean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-09/income_mean.csv')
 ```
+
+Cleaning Data sets: Race wealth and Student Debt
+
+```{r}
+race_wealth_v2 <- race_wealth %>% 
+  mutate(wealth_family = round(wealth_family)) %>%
+  filter(!is.na(wealth_family)) %>%
+  arrange(desc(year)) %>%
+  pivot_wider( names_from = c(race, type), values_from = wealth_family) %>%
+  select(- c("Non-White_Average", "Non-White_Median")) %>%
+  filter(year >= 1989)
+
+student_debt_v2 <- student_debt %>%
+  mutate(loan_debt = round(loan_debt)) %>%
+  arrange(desc(year)) %>%
+  pivot_wider(names_from = race, values_from = c(loan_debt, loan_debt_pct))%>%
+  select(year, loan_debt_White, loan_debt_pct_White, loan_debt_Black, loan_debt_pct_Black, loan_debt_Hispanic, loan_debt_pct_Hispanic)
+```
+
+
+Ploting Data set: Race Wealth
+```{r}
+ggplot(race_wealth_v2) +
+  aes(x = year, y = White_Average) +
+  geom_line(linewidth = 3L, colour = "#2857AC") +
+  geom_line(
+    aes(x = year,
+        y = Black_Average),
+    linewidth = 3L,
+    colour = "#46337E"
+  ) +
+  geom_line(
+    aes(x = year,
+        y = Hispanic_Average),
+    linewidth = 3L,
+    colour = "#EF562D"
+  ) +
+  labs(title = "Race Wealth", x = "Year", y = "Income Average") +
+  theme_minimal()
+```
+
+Ploting Data set: Student Debt
+```{r}
+ggplot(student_debt_v2) +
+  aes(x = year, y = loan_debt_pct_White) +
+  geom_line(linewidth = 3L, colour = "#0C4C8A") +
+  geom_line(
+    aes(x = year,
+        y = loan_debt_pct_Black),
+    linewidth = 3L,
+    colour = "#46337E"
+  ) +
+  geom_line(
+    aes(x = year,
+        y = loan_debt_pct_Hispanic),
+    linewidth = 3L,
+    colour = "#EF562D"
+  ) +
+  labs(title = "Student Debt", x = "Year", y = "Loan Debt Percentage ") +
+  theme_minimal()
+```
+
 
