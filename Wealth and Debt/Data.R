@@ -50,7 +50,7 @@ ggplot(race_wealth_plot) +
   facet_wrap(vars(median))
 #plotted data (Median)
 
-kable(race_wealth_clean) %>%
+Race_wealth_table <- kable(race_wealth_clean) %>%
   kable_styling("striped","bordered")
 
 #############################################
@@ -82,8 +82,12 @@ ggplot(student_debt) +
   theme_minimal()
 #plotted data ($)
 
-kable(student_debt_clean) %>%
+install.packages("webshot2")
+library(webshot2)
+
+Student_debt_table <- kable(student_debt_clean) %>%
     kable_styling("striped","bordered")
 
-  
+save_kable(Student_debt_table, "student_debt_table.jpeg")
+save_kable(Race_wealth_table, "Race_wealth_table.jpeg")
 
