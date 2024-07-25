@@ -16,7 +16,11 @@ install.packages("tidytuesdayR")
 install.packages("ggpubr")
 install.packages("ggplot2")
 install.packages("dplyr")
-install.packages()
+install.packages("base")
+install.packages("esquisse")
+install.packages("forcats")
+install.packages("ggrepel")
+install.packages("magrittr")
 ```
 ## Getting the data
 The data provided is sourced from GitHub, where the creator obtained it from the Urban Institute and the US Census. The data focuses on wealth and income over time, highlighting persistent racial disparities in America. The data includes homeownership rates, retirement savings, student loan debt, lifetime savings, income median/mean, income bracket, and income distribution by bracket.
@@ -111,7 +115,7 @@ plot2 <-income_mean %>%
   ) +
   scale_y_continuous(
     limits = c(0, 60000),
-    breaks = function(x) seq(0, 60000, length.out = 6)  # 5 segments create 6 breaks
+    breaks = function(x) seq(0, 60000, length.out = 11)  # 5 segments create 6 breaks
   ) +
   labs(
     x = "Year",
@@ -155,27 +159,46 @@ income_mean %>%
 ### Middle Income Quintile Jitter + GAM
 
 ```{r}
-income_mean %>%
- filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", 
-"White, Not Hispanic"))) %>%
- filter(dollar_type %in% "2019 Dollars") %>%
- filter(income_quintile %in% "Middle") %>%
- ggplot() +
+plot3 <-income_mean %>%
+  filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", "White, Not Hispanic"))) %>% 
+  filter(dollar_type %in% "2019 Dollars") %>%
+  filter(income_quintile %in% 
+           "Middle") %>%
+  ggplot() +
   aes(x = year, y = income_dollars, colour = race) +
   geom_jitter() +
-   geom_smooth(method = "gam", formula = y ~ s(x), se = FALSE) + 
-   scale_x_continuous(limits = c(1967, 2019), breaks = seq(1967, 2019, length.out = 14)  # 10 intervals will create 11 breaks
+  geom_smooth(method = "gam", formula = y ~ s(x), se = FALSE) + 
+  scale_x_continuous(
+    limits = c(1967, 2019),
+    breaks = seq(1967, 2019, length.out = 14)  # 10 intervals will create 11 breaks
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100000),
+    breaks = function(x) seq(0, 100000, length.out = 11),  # 5 segments create 6 breaks
+    labels = scales::comma
   ) +
   labs(
     x = "Year",
-    y = "Income (Inflation-Adjusted to 2019 Dollars)",
-    title = "Trends in Income Quintile's Among Racial Groups (1967-2019)",
+    y = "Average Income (Inflation-Adjusted to 2019 Dollars)",
+    title = "Average Income Trends Among Racial Groups (1967-2019)",
     subtitle = "Middle Income Quintile",
-    caption = "Figure 1: Trends in the lowest income quintile among different racial groups from 1967 to 2019. The plot illustrates how income levels have varied over time for each group, with a smoothed line showing general trends."
+    colour = "Race"  # Set legend title here
   ) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 15L, face = "bold"), plot.subtitle = element_text(size = 13L)
+  theme(
+    plot.title = element_text(size = 17L, face = "bold", margin = margin(b = 10)),  # Add bottom margin to title
+    plot.subtitle = element_text(size = 14L, margin = margin(b = 20)),  # Add bottom margin to subtitle
+    axis.title.x = element_text(size = 15L, face = "bold", margin = margin(t = 20)),  
+    axis.title.y = element_text(size = 15L, face = "bold", margin = margin(r = 20)),
+    axis.text.y = element_text(size = 13L),
+    axis.text.x = element_text(size = 13L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(size = 14L),
+    plot.margin = margin(1, 2, 1, 1, "cm")
   )
+
+print(plot3)
+
 
 ```
 
@@ -183,27 +206,45 @@ income_mean %>%
 
 ## Fourth Income Quintile Jitter + GAM
 ```{r}
-income_mean %>%
- filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", 
-"White, Not Hispanic"))) %>%
- filter(dollar_type %in% "2019 Dollars") %>%
- filter(income_quintile %in% "Fourth") %>%
- ggplot() +
+plot4 <-income_mean %>%
+  filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", "White, Not Hispanic"))) %>% 
+  filter(dollar_type %in% "2019 Dollars") %>%
+  filter(income_quintile %in% 
+           "Fourth") %>%
+  ggplot() +
   aes(x = year, y = income_dollars, colour = race) +
   geom_jitter() +
   geom_smooth(method = "gam", formula = y ~ s(x), se = FALSE) + 
-   scale_x_continuous(limits = c(1967, 2019), breaks = seq(1967, 2019, length.out = 14)  # 10 intervals will create 11 breaks
+  scale_x_continuous(
+    limits = c(1967, 2019),
+    breaks = seq(1967, 2019, length.out = 14)  # 10 intervals will create 11 breaks
+  ) +
+  scale_y_continuous(
+    limits = c(0, 150000),
+    breaks = function(x) seq(0, 150000, length.out = 11),  # 5 segments create 6 breaks
+    labels = scales::comma
   ) +
   labs(
     x = "Year",
-    y = "Income (Inflation-Adjusted to 2019 Dollars)",
-    title = "Trends in Income Quintile's Among Racial Groups (1967-2019)",
+    y = "Average Income (Inflation-Adjusted to 2019 Dollars)",
+    title = "Average Income Trends Among Racial Groups (1967-2019)",
     subtitle = "Fourth Income Quintile",
-    caption = "Figure 1: Trends in the lowest income quintile among different racial groups from 1967 to 2019. The plot illustrates how income levels have varied over time for each group, with a smoothed line showing general trends."
+    colour = "Race"  # Set legend title here
   ) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 15L, face = "bold"), plot.subtitle = element_text(size = 13L)
+  theme(
+    plot.title = element_text(size = 17L, face = "bold", margin = margin(b = 10)),  # Add bottom margin to title
+    plot.subtitle = element_text(size = 14L, margin = margin(b = 20)),  # Add bottom margin to subtitle
+    axis.title.x = element_text(size = 15L, face = "bold", margin = margin(t = 20)),  
+    axis.title.y = element_text(size = 15L, face = "bold", margin = margin(r = 20)),
+    axis.text.y = element_text(size = 13L),
+    axis.text.x = element_text(size = 13L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(size = 14L),
+    plot.margin = margin(1, 2, 1, 1, "cm")
   )
+
+print(plot4)
 ```
 
 
@@ -212,31 +253,88 @@ income_mean %>%
 ### Highest Income Qunitle Jitter + GAM
 
 ```{r}
-income_mean %>%
- filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", 
-"White, Not Hispanic"))) %>%
- filter(dollar_type %in% "2019 Dollars") %>%
- filter(income_quintile %in% "Highest") %>%
- ggplot() +
+plot5 <-income_mean %>%
+  filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", "White, Not Hispanic"))) %>% 
+  filter(dollar_type %in% "2019 Dollars") %>%
+  filter(income_quintile %in% 
+           "Highest") %>%
+  ggplot() +
   aes(x = year, y = income_dollars, colour = race) +
   geom_jitter() +
-   geom_smooth(method = "gam", formula = y ~ s(x), se = FALSE) + 
-   scale_x_continuous(limits = c(1967, 2019), breaks = seq(1967, 2019, length.out = 14)  # 10 intervals will create 11 breaks
+  geom_smooth(method = "gam", formula = y ~ s(x), se = FALSE) + 
+  scale_x_continuous(
+    limits = c(1967, 2019),
+    breaks = seq(1967, 2019, length.out = 14)  # 10 intervals will create 11 breaks
+  ) +
+  scale_y_continuous(
+    limits = c(0, 550000),
+    breaks = function(x) seq(0, 550000, length.out = 11),  # 5 segments create 6 breaks
+    labels = scales::comma
   ) +
   labs(
     x = "Year",
-    y = "Income (Inflation-Adjusted to 2019 Dollars)",
-    title = "Trends in Income Quintile's Among Racial Groups (1967-2019)",
+    y = "Average Income (Inflation-Adjusted to 2019 Dollars)",
+    title = "Average Income Trends Among Racial Groups (1967-2019)",
     subtitle = "Highest Income Quintile",
-    caption = "Figure 1: Trends in the lowest income quintile among different racial groups from 1967 to 2019. The plot illustrates how income levels have varied over time for each group, with a smoothed line showing general trends."
+    colour = "Race"  # Set legend title here
   ) +
   theme_minimal() +
-  theme(plot.title = element_text(size = 15L, face = "bold"), plot.subtitle = element_text(size = 13L)
+  theme(
+    plot.title = element_text(size = 17L, face = "bold", margin = margin(b = 10)),  # Add bottom margin to title
+    plot.subtitle = element_text(size = 14L, margin = margin(b = 20)),  # Add bottom margin to subtitle
+    axis.title.x = element_text(size = 15L, face = "bold", margin = margin(t = 20)),  
+    axis.title.y = element_text(size = 15L, face = "bold", margin = margin(r = 20)),
+    axis.text.y = element_text(size = 13L),
+    axis.text.x = element_text(size = 13L),
+    legend.text = element_text(size = 13L),
+    legend.title = element_text(size = 14L),
+    plot.margin = margin(1, 2, 1, 1, "cm")
   )
+
+print(plot5)
+```
+
+##Analyze Growth
+
+What is CAGR? CAGR measures the annual growth rate of different racial groups' incomes.
+```{r}
+# Define functions for percentage change and CAGR
+percentage_change <- function(start_value, end_value) {
+  ((end_value - start_value) / start_value) * 100
+}
+
+cagr <- function(start_value, end_value, periods) {
+  ((end_value / start_value)^(1 / periods) - 1) * 100
+}
+
+# Filter and plot the data
+filtered_data <- income_mean %>%
+  filter(!(race %in% c("Asian Alone or in Combination", "Black Alone or in Combination", "White, Not Hispanic"))) %>%
+  filter(dollar_type == "2019 Dollars") %>%
+  filter(income_quintile == "Highest")
+
+# Fit GAM models for each race
+gam_models <- filtered_data %>%
+  group_by(race) %>%
+  do(model = gam(income_dollars ~ s(year), data = .))
+
+
+# Calculate growth for each race
+## Keep in mind taht we didnt have data for Asian's until 2002
+growth_summary <- gam_models %>%
+  rowwise() %>%
+  mutate(
+    start_value = predict(model, newdata = data.frame(year = 2002)),
+    end_value = predict(model, newdata = data.frame(year = 2019)),
+    overall_change = percentage_change(start_value, end_value),
+    cagr = cagr(start_value, end_value, 2002 - 2019)
+  ) %>%
+  select(race, overall_change, cagr)
+
+# Print growth summary
+print(growth_summary)
 ```
 
 
+
 ```
-
-## Analyze Growth
-
