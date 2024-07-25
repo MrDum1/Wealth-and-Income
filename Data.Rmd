@@ -5,6 +5,8 @@ date: "2024-07-22"
 output: html_document
 ---
 
+Question: What is the Relationship/Connection between A race's wealth, and their student debt?
+
 Packages installed
 
 ```{r}
@@ -32,7 +34,7 @@ income_mean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascienc
 Cleaning Data sets: Race wealth and Student Debt
 
 ```{r}
-race_wealth_v2 <- race_wealth %>% 
+race_wealth_clean <- race_wealth %>% 
   mutate(wealth_family = round(wealth_family)) %>%
   filter(!is.na(wealth_family)) %>%
   arrange(desc(year)) %>%
@@ -40,54 +42,94 @@ race_wealth_v2 <- race_wealth %>%
   select(- c("Non-White_Average", "Non-White_Median")) %>%
   filter(year >= 1989)
 
-student_debt_v2 <- student_debt %>%
+student_debt_clean <- student_debt %>%
   mutate(loan_debt = round(loan_debt)) %>%
   arrange(desc(year)) %>%
   pivot_wider(names_from = race, values_from = c(loan_debt, loan_debt_pct))%>%
   select(year, loan_debt_White, loan_debt_pct_White, loan_debt_Black, loan_debt_pct_Black, loan_debt_Hispanic, loan_debt_pct_Hispanic)
 ```
 
+Create Race wealth data set for plotting
 
-Ploting Data set: Race Wealth
 ```{r}
-ggplot(race_wealth_v2) +
-  aes(x = year, y = White_Average) +
-  geom_line(linewidth = 3L, colour = "#2857AC") +
-  geom_line(
-    aes(x = year,
-        y = Black_Average),
-    linewidth = 3L,
-    colour = "#46337E"
+race_wealth_plot <- race_wealth %>% 
+  mutate(wealth_family = round(wealth_family)) %>%
+  filter(!is.na(wealth_family)) %>%
+  arrange(desc(year)) %>%
+  filter(year >= 1989)
+
+Wealth_avg <- subset(race_wealth_plot, type == "Average")
+Wealth_med <- subset(race_wealth_plot, type == "Median") 
+
+race_wealth_plot <- merge(Wealth_avg, Wealth_med, by = c("year")) %>%
+  rename(average = type.x, median = type.y, average_race = race.x, median_race = race.y, average_income = wealth_family.x, median_income = wealth_family.y)
+```
+
+Plotting Data set: Average Race Wealth
+
+```{r}
+ggplot(race_wealth_plot) +
+  aes(x = year, y = average_income, colour = average_race) +
+  geom_line(linewidth = 3L) +
+  scale_color_viridis_d(option = "inferno", direction = 1) +
+  labs(
+    x = "Year",
+    y = "Average Income",
+    title = "Average Race Wealth"
   ) +
-  geom_line(
-    aes(x = year,
-        y = Hispanic_Average),
-    linewidth = 3L,
-    colour = "#EF562D"
+  theme_minimal() +
+  theme(
+    legend.text = element_text(size = 11L),
+    legend.title = element_text(size = 11L)
   ) +
-  labs(title = "Race Wealth", x = "Year", y = "Income Average") +
+  facet_wrap(vars(average))
+```
+
+Plotting Data set: Median Race Wealth
+
+```{r}
+ggplot(race_wealth_plot) +
+  aes(x = year, y = median_income, colour = median_race) +
+  geom_line(linewidth = 3L) +
+  scale_color_viridis_d(option = "inferno", direction = 1) +
+  labs(
+    x = "Year",
+    y = "Median Income",
+    title = "Median Race Wealth"
+  ) +
+  theme_minimal() +
+  theme(legend.text = element_text(size = 11L)) +
+  facet_wrap(vars(median))
+```
+
+Plotting Data set: Percentage Student Debt
+
+```{r}
+ggplot(student_debt) +
+  aes(x = year, y = loan_debt_pct, colour = race) +
+  geom_line(linewidth = 3L) +
+  scale_color_viridis_d(option = "inferno", direction = 1) +
+  labs(title = "Student Debt (Percentage)", x = "Year", y = "Loan Debt Percentage") +
   theme_minimal()
 ```
 
-Ploting Data set: Student Debt
+plotting Data set: Student Debt (\$)
+
 ```{r}
-ggplot(student_debt_v2) +
-  aes(x = year, y = loan_debt_pct_White) +
-  geom_line(linewidth = 3L, colour = "#0C4C8A") +
-  geom_line(
-    aes(x = year,
-        y = loan_debt_pct_Black),
-    linewidth = 3L,
-    colour = "#46337E"
-  ) +
-  geom_line(
-    aes(x = year,
-        y = loan_debt_pct_Hispanic),
-    linewidth = 3L,
-    colour = "#EF562D"
-  ) +
-  labs(title = "Student Debt", x = "Year", y = "Loan Debt Percentage ") +
+ggplot(student_debt) +
+  aes(x= year, y = loan_debt, colour = race) + 
+  geom_line(linewidth = 3L) +
+  scale_color_viridis_d(option = "inferno", direction = 1) +
+  labs(title = "Student Debt ($)", x = "Year", y = "Loan Debt ($)") +
   theme_minimal()
 ```
 
+Neatly show data:
 
+```{r}
+kable(race_wealth_clean) %>%
+  kable_styling("striped","bordered")
+
+kable(student_debt_clean) %>%
+  kable_styling("striped","bordered")
+```
