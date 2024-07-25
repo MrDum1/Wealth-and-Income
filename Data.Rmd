@@ -69,21 +69,28 @@ Plotting Data set: Average Race Wealth
 
 ```{r}
 ggplot(race_wealth_plot) +
-  aes(x = year, y = average_income, colour = average_race) +
-  geom_line(linewidth = 3L) +
-  scale_color_viridis_d(option = "inferno", direction = 1) +
-  labs(
-    x = "Year",
-    y = "Average Income",
-    title = "Average Race Wealth"
-  ) +
-  theme_minimal() +
-  theme(
-    legend.text = element_text(size = 11L),
-    legend.title = element_text(size = 11L)
-  ) +
-  facet_wrap(vars(average))
+          aes(x = year, y = average_income, colour = average_race) +
+          geom_line(linewidth = 3L) +
+          scale_color_viridis_d(option = "inferno", direction = 1) +
+          labs(
+            x = "Year",
+            y = "Average Income",
+            title = "Average Race Wealth"
+          ) +
+          theme_minimal() +
+          theme(
+            legend.text = element_text(size = 11L),
+            legend.title = element_text(size = 11L)
+          ) +
+          facet_wrap(vars(average))
+
 ```
+
+Notes:
+
+-   Slight drop between 2007-2010
+
+-   Slight increase 2004-2007
 
 Plotting Data set: Median Race Wealth
 
@@ -102,6 +109,12 @@ ggplot(race_wealth_plot) +
   facet_wrap(vars(median))
 ```
 
+Notes:
+
+-   Slight drop between 2007-2010 (White having a huge decrease in that time)
+
+-   Little to no increase
+
 Plotting Data set: Percentage Student Debt
 
 ```{r}
@@ -113,6 +126,12 @@ ggplot(student_debt) +
   theme_minimal()
 ```
 
+Notes:
+
+-   Some fluctuation between 1989-2001
+
+-   Large increase in all races (2007- 2016)
+
 plotting Data set: Student Debt (\$)
 
 ```{r}
@@ -123,6 +142,12 @@ ggplot(student_debt) +
   labs(title = "Student Debt ($)", x = "Year", y = "Loan Debt ($)") +
   theme_minimal()
 ```
+
+Notes:
+
+-   Large increase between 2013-2016
+
+-   Little to no decrease
 
 Neatly show data:
 
