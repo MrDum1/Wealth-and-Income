@@ -1,0 +1,14 @@
+---
+title: "Race Wealth vs. Student Debt"
+author: "Walter"
+date: "2024-07-25"
+output: html_document
+---
+
+Question: What is the Relationship/Connection between A race's wealth, and their student debt?
+
+Answer:
+
+In the previous markdown, we saw in the plots both data sets increasing overtime. We see with between races, during 2007-2010 a great decrease of income happened to all of the races and as well as a increase of student debt with student debt increasing around a 4-8% . The increase could be caused by the decrease of the amount of income within the races. With the decrease of income, students (or parents) will be reluctant to pay for the debt to be able to save money.
+
+We also see between 2013-2016, There was a increase between both income and student debt, with this time a 3-5%. 
