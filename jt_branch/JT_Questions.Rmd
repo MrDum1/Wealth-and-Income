@@ -1,0 +1,20 @@
+---
+title: "Questions For Wealth And Income Overtime"
+author: "Janel"
+date: "2024-07-22"
+output: html_document
+---
+
+## Notes
+
+Years are separated into a different number of rows depending on the context of the data. For data containing any "pct" columns means "percentage". In the `retirement` data table, column *"retirement"* refers to retirement savings between different races over the years (NOT the amount of people who retired).
+
+Not all data sets have the same years. Some data sets have less years than others and some changing consecutively, others non-consecutively.
+
+------------------------------------------------------------------------
+
+## Questions
+
+Is there a relationship between home owner percentage over the years and retirement dollars? How does this correlate with races with the highest and lowest student debt overall?
+
+Use data sets `home_owner`, `retirement`, and `student_debt`.
