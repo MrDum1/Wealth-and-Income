@@ -34,9 +34,7 @@ ggplot(race_wealth_plot) +
   scale_color_viridis_d(option = "inferno", direction = 1) +
   labs(title = "Average Race Wealth", x = "Year", y = "Average Income") +
   theme_minimal() +
-  theme(
-    legend.text = element_text(size = 11L),
-  ) +
+  theme(legend.text = element_text(size = 11L),) +
   facet_wrap(vars(average))
 #plotted data (Average)
 
@@ -90,4 +88,5 @@ Student_debt_table <- kable(student_debt_clean) %>%
 
 save_kable(Student_debt_table, "student_debt_table.jpeg")
 save_kable(Race_wealth_table, "Race_wealth_table.jpeg")
+
 
